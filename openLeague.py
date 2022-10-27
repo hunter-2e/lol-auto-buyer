@@ -1,0 +1,22 @@
+import pyautogui as auto
+
+auto.click(151, 1062)
+auto.typewrite("league of legends")
+auto.sleep(2)
+auto.click(165,497)
+auto.sleep(30)
+auto.click(441,200)
+auto.sleep(2)
+auto.click(363, 735)
+auto.sleep(1)
+auto.click(850,846)
+auto.sleep(4)
+auto.click(972, 845)
+auto.sleep(.25)
+auto.click(886,783)
+auto.sleep(.25)
+auto.click(1013, 844)
+auto.sleep(.25)
+auto.click(1162, 783)
+
+auto.mouseInfo()

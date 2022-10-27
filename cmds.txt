@@ -1,0 +1,38 @@
+#Application to get mouse location hex etc.
+auto.mouseInfo()
+
+#Move mouse to location
+auto.moveTo(500,450)
+
+#Move mouse relative to current location
+auto.moveRel(40,40)
+
+#Get mouse current position
+auto.position()
+
+#Clicks at location
+auto.click(200,200)
+
+#Drag to location
+auto.dragTo(200,200)
+
+#Drag relative to current position
+auto.dragRel(200,200)
+
+#Scroll that many pixels up
+auto.scroll(100)
+
+#Types
+auto.typewrite("HELLOW WORLD!")
+
+#Presses a, then left arrow, then ctrlleft
+auto.typewrite(["a","left","ctrlleft"])
+
+#Presses combination of keys at same time
+auto.hotkey("ctrlleft", "c")
+
+#Press key
+auto.press('a')
+
+#Counts down while printing also pretty much sleeps for that ammount of time
+auto.coundown(10)
