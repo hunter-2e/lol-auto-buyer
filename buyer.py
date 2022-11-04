@@ -25,14 +25,47 @@ def captureChat():
     chatRead = tess.image_to_string(image)
     return chatRead
 
-coords = auto.locateCenterOnScreen("fountain.png", confidence=.3)
-auto.click(coords)
-print(captureChat())
+wantedItems = input("Type wanted items split by ',' with no spaces after: ").split(',')
+curItem = 0
 
 while 1:
-    if keyboard.read_key() == 'b':
-        print("pressed b")
-        auto.sleep(3)
-        
+    
+    #Wait for recall
+    keyboard.wait('b')
+
+    #Check if in fountain
+    fountainCoords = auto.locateCenterOnScreen("fountain.png", confidence=.3)
+    while(fountainCoords == None):
+        fountainCoords = auto.locateCenterOnScreen("fountain.png", confidence=.3)
+
+    #Open shop and search item
+    keyboard.press('p')
+    auto.sleep(.1)
+    keyboard.press('l')
+    auto.sleep(.1)
+    auto.typewrite(wantedItems[curItem])
+
+    #Buy next item in list
+    searchIcon = auto.locateCenterOnScreen("searchIcon.png", confidence=.7)
+    while(fountainCoords == None):
+        searchIcon = auto.locateCenterOnScreen("searchIcon.png", confidence=.7)
+
+    auto.moveTo(searchIcon)
+    auto.moveRel(0,100)
+    auto.mouseDown(button='right')
+    auto.mouseUp(button='right')
+
+    #Take screenshot of items
+    auto.moveRel(0,-100)
+    auto.moveRel(721, 34)
+
+    left, top = auto.position()
+    itemTree = auto.screenshot(region=(left, top, 453, 374))
+    itemTree = cv2.cvtColor(np.array(itemTree), cv2.COLOR_RGB2BGR)
+    cv2.imwrite('itemTree.png', itemTree)
+
+    itemRead = tess.image_to_string(itemTree)
+    print(itemRead)
+    auto.mouseInfo()
 
 
