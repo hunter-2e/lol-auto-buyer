@@ -25,27 +25,42 @@ def captureChat():
     chatRead = tess.image_to_string(image)
     return chatRead
 
+def getMyItems():
+    #Take screenshot of items
+    recallIcon = auto.locateCenterOnScreen("recall.png", confidence=.7)
+    while(recallIcon == None):
+        recallIcon = auto.locateCenterOnScreen("recall.png", confidence=.7)
+    
+    auto.moveTo(recallIcon)
+    auto.moveRel(-175, -77)
+    top, left = auto.position()
+    myItems = auto.screenshot(region=(top, left, 156,100))
+    myItems = cv2.cvtColor(np.array(myItems), cv2.COLOR_RGB2BGR)
+    return myItems
+
 wantedItems = input("Type wanted items split by ',' with no spaces after: ").split(',')
 curItem = 0
 
 while 1:
-    
-    #Wait for recall
+    #Wait for recall to capture screen shot of items
     keyboard.wait('b')
+    curItems = getMyItems()
+    cv2.imwrite('myItems.png', curItems)
+
 
     #Check if in fountain
     fountainCoords = auto.locateCenterOnScreen("fountain.png", confidence=.3)
     while(fountainCoords == None):
         fountainCoords = auto.locateCenterOnScreen("fountain.png", confidence=.3)
 
-    #Open shop and search item
+
+    #Open shop and search item then buy it
     keyboard.press('p')
     auto.sleep(.1)
     keyboard.press('l')
     auto.sleep(.1)
     auto.typewrite(wantedItems[curItem])
 
-    #Buy next item in list
     searchIcon = auto.locateCenterOnScreen("searchIcon.png", confidence=.7)
     while(fountainCoords == None):
         searchIcon = auto.locateCenterOnScreen("searchIcon.png", confidence=.7)
@@ -55,17 +70,10 @@ while 1:
     auto.mouseDown(button='right')
     auto.mouseUp(button='right')
 
-    #Take screenshot of items
-    auto.moveRel(0,-100)
-    auto.moveRel(721, 34)
+    #Check if items did not change
+    if auto.locateOnScreen('myItems.png') is None:
+        keyboard.press('p')
+        break
 
-    left, top = auto.position()
-    itemTree = auto.screenshot(region=(left, top, 453, 374))
-    itemTree = cv2.cvtColor(np.array(itemTree), cv2.COLOR_RGB2BGR)
-    cv2.imwrite('itemTree.png', itemTree)
-
-    itemRead = tess.image_to_string(itemTree)
-    print(itemRead)
-    auto.mouseInfo()
 
 
